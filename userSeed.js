@@ -22,7 +22,7 @@ const UserRegister = async () => {
       name: "Admin",
       email: "admin@gmail.com",
       password: hashPassword,
-      role: 'admin'
+      role: 'Admin'
     });
 
     await newUser.save();
