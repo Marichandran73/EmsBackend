@@ -1,6 +1,6 @@
 import Express from 'express';
 import {
-  CreateEmployee ,Upload, Getemployee, GetEmployees, UpdateEmployee
+  CreateEmployee ,Upload, Getemployee, GetEmployees, UpdateEmployee, FetchEmployeeBydepId
 } from '../controllers/EmployeeController.js';
 import Authmiddleware from '../middleware/authmiddleware.js';
 
@@ -10,6 +10,7 @@ router.post('/addemp',Authmiddleware,Upload.single('image'),CreateEmployee);
 router.get('/getemp', Authmiddleware, GetEmployees);
 router.get('/:id', Authmiddleware, Getemployee);
 router.put('/:id', Authmiddleware, UpdateEmployee);
+router.get('/department/:id', Authmiddleware, FetchEmployeeBydepId);
 
 
 

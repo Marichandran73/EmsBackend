@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import Multer from "multer";
 import User from "../models/User.js";
 import path from "path";
+import mongoose from "mongoose";
+
 
 
 
@@ -90,7 +92,6 @@ export const CreateEmployee = async (req, res) => {
       message: "Employee added successfully",
     });
   } catch (err) {
-    console.error("Error creating employee:", err);
     return res.status(500).json({
       success: false,
       message: err.message,
@@ -115,20 +116,33 @@ export const GetEmployees =async(req ,res)=>{
         }) }
 }
 
-
 export const Getemployee = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id);
 
-    const employee = await Employee.findById(id)
+    if (!id || !mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing employee ID",
+      });
+    }
+
+    let employee = await Employee.findById(id)
       .populate("userId", { password: 0 })
       .populate("department");
 
     if (!employee) {
-      return res.status(404).json({
-        success: false,
-        message: "Employee not found",
-      });
+      employee = await Employee.findOne({ userId: id })
+        .populate("userId", { password: 0 })
+        .populate("department");
+
+      if (!employee) {
+        return res.status(404).json({
+          success: false,
+          message: "Employee not found",
+        });
+      }
     }
 
     return res.status(200).json({
@@ -143,6 +157,7 @@ export const Getemployee = async (req, res) => {
     });
   }
 };
+
 
 
 export const UpdateEmployee = async (req, res) => {
@@ -182,11 +197,28 @@ export const UpdateEmployee = async (req, res) => {
     });
 
   } catch (err) {
-    console.error("UpdateEmployee Error:", err);
     return res.status(500).json({
       success: false,
       message: "Server error: " + err.message,
     });
   }
 };
+
+export const FetchEmployeeBydepId =async(req,res)=>{
+  try {
+    const { id } = req.params;
+
+    const employee = await Employee.find({ department: id });
+    return res.status(200).json({
+      success: true,
+      message: "Employee fetched successfully",
+      employee,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+}
 
