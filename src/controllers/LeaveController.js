@@ -43,7 +43,7 @@ export const AddLeave = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Leave request submitted successfully",
+      message: "Leave request submit successfully",
     });
 
   } catch (err) {
