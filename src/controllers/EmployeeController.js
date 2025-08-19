@@ -119,16 +119,8 @@ export const GetEmployees =async(req ,res)=>{
 export const Getemployee = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
 
-    if (!id || !mongoose.isValidObjectId(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid or missing employee ID",
-      });
-    }
-
-    let employee = await Employee.findById(id)
+    let employee = await Employee.findById({_id:id})
       .populate("userId", { password: 0 })
       .populate("department");
 
@@ -136,7 +128,7 @@ export const Getemployee = async (req, res) => {
       employee = await Employee.findOne({ userId: id })
         .populate("userId", { password: 0 })
         .populate("department");
-
+        
       if (!employee) {
         return res.status(404).json({
           success: false,
@@ -170,6 +162,7 @@ export const UpdateEmployee = async (req, res) => {
       salary,
       address,
     } = req.body;
+    
 
     const employee = await Employee.findById(id);
     if (!employee) {
@@ -205,9 +198,8 @@ export const UpdateEmployee = async (req, res) => {
 };
 
 export const FetchEmployeeBydepId =async(req,res)=>{
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-
     const employee = await Employee.find({ department: id });
     return res.status(200).json({
       success: true,

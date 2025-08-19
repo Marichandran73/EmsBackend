@@ -10,7 +10,7 @@ const SalarySchema = new Mongoose.Schema({
         type: Number,
         required: true
     },
-    allowance: {
+    allowences: {
         type: Number,
     },
     deduction: {
