@@ -7,6 +7,8 @@ import AuthRouter from './src/routes/auth.route.js';
 import DepartmentRouter from './src/routes/Department.route.js';
 import EmployeeRouter from './src/routes/Employee.route.js';
 import SalaryRouter from './src/routes/Salary.route.js';
+import LeaveRouter from './src/routes/Leave.route.js';
+import SettingRouter from './src/routes/Setting.route.js';
 
 import ConnectDB from "./config/db.js";
 import path from 'path';
@@ -30,6 +32,8 @@ app.use('/api/auth',AuthRouter)
 app.use('/api/department', DepartmentRouter)
 app.use('/api/employee', EmployeeRouter)
 app.use('/api/Salary', SalaryRouter)
+app.use('/api/Leave', LeaveRouter)
+app.use('/api/Setting', SettingRouter)
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`)
