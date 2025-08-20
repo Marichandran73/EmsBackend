@@ -43,7 +43,7 @@ export const AddLeave = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Leave request submit successfully",
+      message: "Leave request submitted successfully",
     });
 
   } catch (err) {
@@ -61,6 +61,7 @@ export const GetLeavesByUserId = async (req, res) => {
     const { id } = req.params;
 
     const employee = await Employee.findOne({ userId: id });
+
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -68,7 +69,6 @@ export const GetLeavesByUserId = async (req, res) => {
       });
     }
     const getLeaves = await LeaveModel.find({ employeeId: employee._id });
-
     return res.status(200).json({
       success: true,
       message: "Your leave details",
@@ -109,4 +109,43 @@ export const GetLeaves =async(req, res)=>{
       message: err.message,
     });
   }
+}
+
+export const GetDetails= async(req, res)=>{
+  const {id}= req.params;
+
+  try{
+    const Leave= await LeaveModel.findById({_id:id}).populate({
+    path:"employeeId",
+    populate :[
+      {
+        path:"department",
+        select: 'departmentName'
+      },
+      {
+        path:'userId',
+        select:'name, profileImage'
+      }
+    ]
+   })
+    if(!Leave){
+      res.status(401).json({
+        success:false,
+        message:"leave not found"
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Your leave details",
+      Leave,
+    });
+  }
+  catch(err){
+    return res.status(500).json({
+      success:false,
+      message:err.message
+    })
+  }
+
 }
