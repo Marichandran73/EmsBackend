@@ -1,4 +1,4 @@
-import SalaryModel  from "../models/salary.js";
+import SalaryModel  from "../models/Salary.js";
 import Employee from '../models/Employee.js'
 
 
