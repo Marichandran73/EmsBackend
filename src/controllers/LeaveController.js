@@ -59,6 +59,7 @@ export const AddLeave = async (req, res) => {
 export const GetLeavesByUserId = async (req, res) => {
   try {
     const { id } = req.params;
+    // console.log('leaves data :',id)
 
     const employee = await Employee.findOne({ userId: id });
 
@@ -149,3 +150,34 @@ export const GetDetails= async(req, res)=>{
   }
 
 }
+
+export const UpdateStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedLeave = await LeaveModel.findByIdAndUpdate(
+      id,
+      { status: req.body.status },
+      { new: true }
+    );
+
+    if (!updatedLeave) {
+      return res.status(404).json({
+        success: false,
+        message: "Leave status not found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Successfully updated your status",
+      data: updatedLeave
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+};
